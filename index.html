@@ -1,322 +1,125 @@
 <!DOCTYPE html>
-<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-<!-- three.js library -->
-<script src='vendor/three.js/build/three.js'></script>
-<!-- jsartookit -->
-<script src="../vendor/jsartoolkit5/build/artoolkit.min.js"></script>
-<script src="../vendor/jsartoolkit5/js/artoolkit.api.js"></script>
-<!-- include threex.artoolkit -->
-<script src="../src/threex/threex-artoolkitsource.js"></script>
-<script src="../src/threex/threex-artoolkitcontext.js"></script>
-<script src="../src/threex/threex-arbasecontrols.js"></script>
-<script src="../src/threex/threex-armarkercontrols.js"></script>
-<script>THREEx.ArToolkitContext.baseURL = '../'</script>
+<html lang="en">
 
-<body style='margin : 0px; overflow: hidden; font-family: Monospace;'><div style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
-	<a href="https://github.com/jeromeetienne/AR.js/" target="_blank">AR.js</a> - Measure the distance between 2 markers - hiro and kanji
-	<br/>
-	Contact me any time at <a href='https://twitter.com/jerome_etienne' target='_blank'>@jerome_etienne</a>
-</div>
-<script>
-	//////////////////////////////////////////////////////////////////////////////////
-	//		Init
-	//////////////////////////////////////////////////////////////////////////////////
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>Document</title>
 
-	// init renderer
-	var renderer	= new THREE.WebGLRenderer({
-		antialias	: true,
-		alpha: true
-	});
-	renderer.setClearColor(new THREE.Color('lightgrey'), 0)
-	renderer.setSize( 640, 480 );
-	renderer.domElement.style.position = 'absolute'
-	renderer.domElement.style.top = '0px'
-	renderer.domElement.style.left = '0px'
-	document.body.appendChild( renderer.domElement );
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+    <script
+        src="https://unpkg.com/aframe-environment-component@1.3.3/dist/aframe-environment-component.min.js"></script>
+    <script src="index.js"></script>
+</head>
 
-	// array of functions for the rendering loop
-	var onRenderFcts= [];
+<body style="margin : 0px; overflow: hidden;">
+   
+    <a-scene embedded arjs='sourceType: webcam;'>
 
-	// init scene and camera
-	var scene	= new THREE.Scene();
+        <a-marker id="marker-a" preset='custom' type='pattern' url='assets/pattern-g-angle-box.patt' marker-a>
+            <a-entity cloak></a-entity>
+            <a-entity object-a id="object-a" position="0 0 0" animation-mixer></a-entity>
+        </a-marker>
+        <a-marker id="marker-b" preset='custom' type='pattern' url='assets/pattern-g-angle-sphere.patt' marker-b>
+            <a-entity cloak></a-entity>
+            <a-entity id="object-b" gltf-model="/assets/stuff_octopus_v2.glb" scale="0.3 0.3 0.3" position="0 0 0"
+                object-b>
+            </a-entity>
+        </a-marker>
 
-	//////////////////////////////////////////////////////////////////////////////////
-	//		Initialize a basic camera
-	//////////////////////////////////////////////////////////////////////////////////
+    <a-assets>
+        <video
+            id="gokuvid"
+            src="assets/goku.mp4"
+            preload="auto"
+            response-type="arraybuffer"
+            loop
+            crossorigin
+            webkit-playsinline
+            autoplay
+            playsinline
+        ></video>
+    </a-assets>
 
-	// Create a camera
-	var camera = new THREE.Camera();
-	scene.add(camera);
+    <a-marker
+        type="pattern"
+        preset="custom"
+        url="assets/goku.patt"
+        gokuhandler
+        smooth="true"
+        smoothCount="10"
+        smoothTolerance="0.01"
+        smoothThreshold="5"
+        raycaster="objects: .clickable"
+        emitevents="true"
+        cursor="fuse: false; rayOrigin: mouse;"
+        id="markerGoku"
+    >
+        <a-video
+            src="#gokuvid"
+            scale="1 1 1"
+            position="0 0.1 0"
+            rotation="-90 0 0"
+            class="clickable"
+            gesture-handler
+            id="object-goku" object-goku
+        ></a-video>
+    </a-marker>
+       
+    <a-assets>
+        <video
+            id="newvid"
+            src="assets/NewMark.mp4"
+            preload="auto"
+            response-type="arraybuffer"
+            loop
+            crossorigin
+            webkit-playsinline
+            autoplay
+            playsinline
+        ></video>
+    </a-assets>
+    <a-text id="distancetext" ></a-text>
 
-	////////////////////////////////////////////////////////////////////////////////
-	//          handle arToolkitSource
-	////////////////////////////////////////////////////////////////////////////////
+    <a-marker
+        type="pattern"
+        preset="custom"
+        url="assets/NewMark.patt"
+        newmarkerhandler
+        smooth="true"
+        smoothCount="10"
+        smoothTolerance="0.01"
+        smoothThreshold="5"
+        raycaster="objects: .clickable"
+        emitevents="true"
+        cursor="fuse: false; rayOrigin: mouse;"
+        id="markerNew"
+    >
+        <a-video
+            src="#newvid"
+            scale="1 1 1"
+            position="0 0.1 0"
+            rotation="-90 0 0"
+            class="clickable"
+            gesture-handler
+            id="object-newmarker" object-newmarker
+        ></a-video>
+    </a-marker>
 
-	var arToolkitSource = new THREEx.ArToolkitSource({
-		// to read from the webcam
-		sourceType : 'webcam',
-
-		// to read from an image
-		// sourceType : 'image',
-		// sourceUrl : THREEx.ArToolkitContext.baseURL + '../data/images/img.jpg',
-
-		// to read from a video
-		// sourceType : 'video',
-		// sourceUrl : THREEx.ArToolkitContext.baseURL + '../data/videos/headtracking.mp4',
-	})
-
-	arToolkitSource.init(function onReady(){
-		onResize()
-	})
-
-	// handle resize
-	window.addEventListener('resize', function(){
-		onResize()
-	})
-	function onResize(){
-		arToolkitSource.onResizeElement()
-		arToolkitSource.copyElementSizeTo(renderer.domElement)
-		if( arToolkitContext.arController !== null ){
-			arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas)
-		}
-	}
-	////////////////////////////////////////////////////////////////////////////////
-	//          initialize arToolkitContext
-	////////////////////////////////////////////////////////////////////////////////
-
-	// create atToolkitContext
-	var arToolkitContext = new THREEx.ArToolkitContext({
-		cameraParametersUrl: THREEx.ArToolkitContext.baseURL + '../data/data/camera_para.dat',
-		detectionMode: 'mono',
-	})
-	// initialize it
-	arToolkitContext.init(function onCompleted(){
-		// copy projection matrix to camera
-		camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
-	})
-
-	// update artoolkit on every frame
-	onRenderFcts.push(function(){
-		if( arToolkitSource.ready === false )	return
-
-		arToolkitContext.update( arToolkitSource.domElement )
-	})
-
-;(function(){
-
-	//////////////////////////////////////////////////////////////////////////////
-	//		markerRoot1
-	//////////////////////////////////////////////////////////////////////////////
-
-	// build markerControls
-	var markerRoot1 = new THREE.Group
-	markerRoot1.name = 'marker1'
-	scene.add(markerRoot1)
-	var markerControls = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
-		type : 'pattern',
-		patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.hiro',
-		// patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji',
-	})
-
-	// add a gizmo in the center of the marker
-	var geometry	= new THREE.OctahedronGeometry( 0.1, 0 )
-	var material	= new THREE.MeshNormalMaterial({
-		wireframe: true
-	});
-	var mesh	= new THREE.Mesh( geometry, material );
-	markerRoot1.add( mesh );
-
-	//////////////////////////////////////////////////////////////////////////////
-	//		markerRoot2
-	//////////////////////////////////////////////////////////////////////////////
-
-	// build markerControls
-	var markerRoot2 = new THREE.Group
-	markerRoot2.name = 'marker2'
-	scene.add(markerRoot2)
-	var markerControls = new THREEx.ArMarkerControls(arToolkitContext, markerRoot2, {
-		type : 'pattern',
-		// patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.hiro',
-		patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji',
-	})
-
-	// add a gizmo in the center of the marker
-	var geometry	= new THREE.OctahedronGeometry( 0.1, 0 )
-	var material	= new THREE.MeshNormalMaterial({
-		wireframe: true
-	});
-	var mesh	= new THREE.Mesh( geometry, material );
-	markerRoot2.add( mesh );
-})()
+        <a-entity camera></a-entity>
+        
 
 
-;(function(){
-	var markerRoot1 = scene.getObjectByName('marker1')
-	var markerRoot2 = scene.getObjectByName('marker2')
-
-	var container = new THREE.Group
-	scene.add(container)
-
-	// update container.visible and scanningSpinner visibility
-	onRenderFcts.push(function(){
-		if( markerRoot1.visible === true && markerRoot2.visible === true ){
-			container.visible = true
-			document.querySelector('.scanningSpinner').style.display = 'none'
-		}else{
-			container.visible = false
-			document.querySelector('.scanningSpinner').style.display = ''
-		}
-	})
-
-	//////////////////////////////////////////////////////////////////////////////
-	//		build lineMesh
-	//////////////////////////////////////////////////////////////////////////////
-	var material = new THREE.LineDashedMaterial( {
-		dashSize: 1,
-		gapSize: 1,
-	} );
-	var geometry = new THREE.Geometry();
-	geometry.vertices.push(new THREE.Vector3(1, 0, -3));
-	geometry.vertices.push(new THREE.Vector3(-1, 0, -3));
-	var lineMesh = new THREE.Line(geometry, material);
-	container.add(lineMesh)
-
-	// update lineMesh
-	onRenderFcts.push(function(){
-		var geometry = lineMesh.geometry
-		geometry.vertices[0].copy(markerRoot1.position)
-		geometry.vertices[1].copy(markerRoot2.position)
-		geometry.verticesNeedUpdate = true
-
-		geometry.computeBoundingSphere();
-		lineMesh.computeLineDistances();
-
-		var length = markerRoot1.position.distanceTo(markerRoot2.position)
-		lineMesh.material.scale = length * 10
-		lineMesh.material.needsUpdate = true
-	})
 
 
-	//////////////////////////////////////////////////////////////////////////////
-	//		display the distance between the 2 markers
-	//////////////////////////////////////////////////////////////////////////////
 
-	// build texture
-	var canvas = document.createElement( 'canvas' );
-	canvas.width = 128;
-	canvas.height = 64;
-	var context = canvas.getContext( '2d' );
-	var texture = new THREE.CanvasTexture( canvas );
 
-	// build sprite
-	var material = new THREE.SpriteMaterial({
-		map: texture,
-		color: 0xffffff,
-	});
-	var sprite = new THREE.Sprite( material );
-	sprite.scale.multiplyScalar(0.5)
-	container.add(sprite)
 
-	// upload measure
-	onRenderFcts.push(function(){
-		// update sprite position
-		sprite.position.addVectors(markerRoot1.position, markerRoot2.position).multiplyScalar(1/2)
-
-		// get the text to display
-		var length = markerRoot1.position.distanceTo(markerRoot2.position)
-		var text = length.toFixed(2)
-
-		// put the text in the sprite
-		context.font = '40px monospace';
-		context.clearRect( 0, 0, canvas.width, canvas.height );
-		context.fillStyle = '#fff';
-		context.fillText(text, canvas.width/4, 3*canvas.height/4 )
-		sprite.material.map.needsUpdate = true
-	})
-
-})()
-	//////////////////////////////////////////////////////////////////////////////////
-	//		render the whole thing on the page
-	//////////////////////////////////////////////////////////////////////////////////
-
-	// render the scene
-	onRenderFcts.push(function(){
-		renderer.render( scene, camera );
-	})
-
-	// run the rendering loop
-	var lastTimeMsec= null
-	requestAnimationFrame(function animate(nowMsec){
-		// keep looping
-		requestAnimationFrame( animate );
-		// measure time
-		lastTimeMsec	= lastTimeMsec || nowMsec-1000/60
-		var deltaMsec	= Math.min(200, nowMsec - lastTimeMsec)
-		lastTimeMsec	= nowMsec
-		// call each update function
-		onRenderFcts.forEach(function(onRenderFct){
-			onRenderFct(deltaMsec/1000, nowMsec/1000)
-		})
-	})
-</script>
-
-<!-- Scanning animation when the marker are not visible -->
-<div class="scanningSpinner">
-	<label>
-		Scanning
-	</label>
-	<div class="rect1"></div>
-	<div class="rect2"></div>
-	<div class="rect3"></div>
-</div>
-<style>
-.scanningSpinner {
-	margin: 100px auto;
-	height: 40px;
-	text-align: center;
-}
-
-.scanningSpinner label {
-	display: block;
-	color: #333;
-	font-size: 200%;
-}
-
-.scanningSpinner > div {
-	background-color: #333;
-	height: 100%;
-	width: 6px;
-	display: inline-block;
-
-	-webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
-	animation: sk-stretchdelay 1.2s infinite ease-in-out;
-}
-
-.scanningSpinner .rect2 {
-	-webkit-animation-delay: -1.1s;
-	animation-delay: -1.1s;
-}
-
-.scanningSpinner .rect3 {
-	-webkit-animation-delay: -1.0s;
-	animation-delay: -1.0s;
-}
-
-@-webkit-keyframes sk-stretchdelay {
-	0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
-	20% { -webkit-transform: scaleY(1.0) }
-}
-
-@keyframes sk-stretchdelay {
-	0%, 40%, 100% {
-		transform: scaleY(0.4);
-		-webkit-transform: scaleY(0.4);
-		}
-	20% {
-		transform: scaleY(1.0);
-		-webkit-transform: scaleY(1.0);
-	}
-}
-</style>
-
+    </a-scene>
 </body>
+
+</html>
