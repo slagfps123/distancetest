@@ -26,6 +26,7 @@ AFRAME.registerComponent("gokuhandler", {
         const markerVideo1 = this.el;
         const objectGoku = document.getElementById("object-goku");
         const objectNewMarker = document.getElementById("object-newmarker");
+        const gokuText = document.getElementById("goku-text");
         const gokuVid = document.getElementById("gokuvid");
         const camera = document.querySelector("[camera]");
         const marker = document.querySelector("markerGoku");
@@ -41,13 +42,14 @@ AFRAME.registerComponent("gokuhandler", {
             let markerPosition = marker.object3D.position;
             let distance = cameraPosition.distanceTo(markerPosition)
 
-         check = setInterval(() => {
+            check = setInterval(() => {
             cameraPosition = camera.object3D.position;
             markerPosition = marker.object3D.position;
             distance = cameraPosition.distanceTo(markerPosition)
-
+            gokuText.setAttribute("value", distance);
             // do what you want with the distance:
             console.log("Distance is: +" distance + " meters.");
+             
         }, 100);         
         });
         // When the marker is lost, the `markerLost` event is triggered
