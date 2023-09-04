@@ -99,6 +99,15 @@
         cursor="fuse: false; rayOrigin: mouse;"
         id="markerNew"
     >
+         <a-text
+            value="This content will always face you."
+            position="0 1.5 0"
+            look-at="[gps-camera]"
+            scale="20 20 20"
+            color="red"
+            id="goku-text"
+            gokuhandler
+        ></a-text>
         <a-video
             src="#newvid"
             scale="1 1 1"
