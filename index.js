@@ -21,16 +21,15 @@ let markerNewvisible = false;
  //   },
 //});
 
-
-
 AFRAME.registerComponent("gokuhandler", {
     init: function () {
         const markerVideo1 = this.el;
         const objectGoku = document.getElementById("object-goku");
         const objectNewMarker = document.getElementById("object-newmarker");
         const gokuVid = document.getElementById("gokuvid");
-        this.cam = document.querySelector("[camera]")
-        this.goku1 = document.querySelector("#object-goku")
+        const camera = document.querySelector('[camera]');
+        const marker = document.querySelector("markerGoku");
+        let check;
 
         // When the marker is found, the `markerFound` event is triggered
         markerVideo1.addEventListener("markerFound", (event) => {
@@ -38,20 +37,28 @@ AFRAME.registerComponent("gokuhandler", {
             // Perform actions when the marker is found
             markerGokuvisible = true;
             gokuVid.play();
-            let camPos = this.cam.object3D.position
-            let goku1pos = this.goku1.object3D.position
-            let distance = camPos.distanceTo(goku1pos)
-            document.getElementById("distancetext").innerHTML=distance;
-            console.log("Distance from Camera to Marker is " + distance);
+            let cameraPosition = camera.object3D.position;
+            let markerPosition = marker.object3D.position;
+            let distance = cameraPosition.distanceTo(markerPosition)
+
+         check = setInterval(() => {
+            cameraPosition = camera.object3D.position;
+            markerPosition = marker.object3D.position;
+            distance = cameraPosition.distanceTo(markerPosition)
+
+            // do what you want with the distance:
+            console.log(distance);
+        }, 100);         
         });
         // When the marker is lost, the `markerLost` event is triggered
         markerVideo1.addEventListener("markerLost", (event) => {
             console.log("Marker lost: Goku");
-            markerGokuvisible = false;
+            markerGokuvisible = false;        
             //                this.vid.pause();
             //                vid.currentTime = 0;
             gokuVid.pause();
             gokuVid.currentTime=0;
+            clearInterval(check);
             
         });
       
