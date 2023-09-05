@@ -23,22 +23,24 @@ let markerNewvisible = false;
 
 AFRAME.registerComponent("gokuhandler", {
     init: function () {
-        const markerVideo1 = this.el;
+        //const markerVideo1 = this.el;
         const objectGoku = document.getElementById("object-goku");
         const objectNewMarker = document.getElementById("object-newmarker");
         const gokuVid = document.getElementById("gokuvid");
+        
         const camera = document.querySelector('[camera]');
         const marker = document.querySelector('markerGoku');
         const distanceText = document.getElementById('distancetext'); // Added this line
+     
         let check;
         // When the marker is found, the `markerFound` event is triggered
-        markerVideo1.addEventListener("markerFound", (event) => {
+        marker.addEventListener("markerFound", (event) => {
             console.log("Marker found: Goku");
             // Perform actions when the marker is found
             markerGokuvisible = true;
             gokuVid.play();
             let cameraPosition = camera.object3D.position;
-            let markerPosition = markerVideo1.object3D.position;
+            let markerPosition = marker.object3D.position;
             let distance = cameraPosition.distanceTo(markerPosition)
             check = setInterval(() => {
                 cameraPosition = camera.object3D.position;
@@ -51,7 +53,7 @@ AFRAME.registerComponent("gokuhandler", {
          
         });
         // When the marker is lost, the `markerLost` event is triggered
-        markerVideo1.addEventListener("markerLost", (event) => {
+        marker.addEventListener("markerLost", (event) => {
             console.log("Marker lost: Goku");
             markerGokuvisible = false;        
             gokuVid.pause();
