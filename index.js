@@ -29,7 +29,7 @@ AFRAME.registerComponent("gokuhandler", {
         const gokuVid = document.getElementById("gokuvid");
         
         const camera = document.querySelector('[camera]');
-        const marker = document.querySelector('markerGoku');
+        const marker = document.querySelector('#markerGoku');
         const distanceText = document.getElementById('distancetext'); // Added this line
      
         let check;
