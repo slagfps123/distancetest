@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const distance = cameraPosition.distanceTo(placePosition).toFixed(2);
 
         // Update the a-text element with the distance
-        distanceText.setAttribute('value', `Distance: ${distance} meters`);
+        distanceText.setAttribute('value', 'Distance: ' + distance + ' meters');
     }
 
     // Set up a loop to continuously calculate and update distance
