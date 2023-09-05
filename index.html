@@ -1,42 +1,29 @@
-<!doctype html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <script src="https://aframe.io/releases/1.1.0/aframe.min.js"></script>
-        <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
-        <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
-        <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
-    <script>
-
-   window.onload = () => {
-    var n = document.querySelector('a-text'); // <-- find first node of that type
-    console.log(n);
-    n.flushToDOM();  // debug aid: this will show the AFrame attribute values
-    console.log(n);  // by default they are not written back to DOM because expensive
-    var distanceMsg = n.getAttribute('distanceMsg'); // <-- returns null, so for show
-    distanceMsg = "so far away"; // just use something else
-    n.setAttribute('value', distanceMsg); // <-- this is how you change the text to display
-    };
-      </script>   
-      
-       </head>
-
-    <body style="margin: 0; overflow: hidden;">
-        <a-scene
-            renderer="logarithmicDepthBuffer: true;"
-            embedded
-            loading-screen="enabled: false;"
-            arjs="sourceType: webcam; debugUIEnabled: false;"
-        >
-         <a-text
-            look-at="[gps-camera]"
-            scale="50 50 50"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR.js Distance Example</title>
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+</head>
+<body style="margin: 0; overflow: hidden;">
+    <a-scene embedded arjs="sourceType: webcam;">
+        <!-- Add a GPS entity place -->
+        <a-gps-entity-place
             gps-entity-place="latitude: 10.325736942959024; longitude: 123.91575691290201;"
-            value= "place1"
-        ></a-text> 
+            name="place-marker"
+        ></a-gps-entity-place>
 
-            <a-camera gps-camera rotation-reader></a-camera>
-        </a-scene>
-    </body>
+        <!-- Camera entity to view the scene -->
+        <a-entity camera></a-entity>
+
+        <!-- Add an a-text element to display the distance -->
+        <a-text position="0 0.1 -0.5" color="black" scale="2 2 2" id="distance-text">Distance: </a-text>
+    </a-scene>
+
+    <!-- Include your JavaScript file -->
+    <script src="app.js"></script>
+</body>
 </html>
