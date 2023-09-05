@@ -26,25 +26,39 @@ AFRAME.registerComponent("gokuhandler", {
         const markerVideo1 = this.el;
         const objectGoku = document.getElementById("object-goku");
         const objectNewMarker = document.getElementById("object-newmarker");
-        const gokuText = document.getElementById("goku-text");
         const gokuVid = document.getElementById("gokuvid");
-
+        const camera = document.querySelector('[camera]');
+        const marker = document.querySelector('markerGoku');
+        const distanceText = document.getElementById('distancetext'); // Added this line
+        let check;
         // When the marker is found, the `markerFound` event is triggered
         markerVideo1.addEventListener("markerFound", (event) => {
             console.log("Marker found: Goku");
             // Perform actions when the marker is found
             markerGokuvisible = true;
-            gokuVid.play();             
-        }, 100);         
+            gokuVid.play();
+            let cameraPosition = camera.object3D.position;
+            let markerPosition = markerVideo1.object3D.position;
+            let distance = cameraPosition.distanceTo(markerPosition)
+            check = setInterval(() => {
+                cameraPosition = camera.object3D.position;
+                markerPosition = marker.object3D.position;
+                distance = cameraPosition.distanceTo(markerPosition)
+
+                // Update the distance text:
+                distanceText.setAttribute('value', 'Distance to object-goku: ' + distance.toFixed(2) + ' meters');
+        }, 100);   
+         
         });
         // When the marker is lost, the `markerLost` event is triggered
         markerVideo1.addEventListener("markerLost", (event) => {
             console.log("Marker lost: Goku");
             markerGokuvisible = false;        
-            //                this.vid.pause();
-            //                vid.currentTime = 0;
             gokuVid.pause();
             gokuVid.currentTime=0;
+            clearInterval(check);
+            // Clear the distance text when marker is lost:
+            distanceText.setAttribute('value', '');
             
         });
       
