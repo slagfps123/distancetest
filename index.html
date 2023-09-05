@@ -1,41 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>AR.js Distance Calculator</title>
-  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-  <script>
-    // Import the AR.js library.
-    import * as AR from 'ar.js';
-    // Create a new AR scene.
-    var scene = new AR.Scene();
-    // Create a new AR camera.
-    var camera = new AR.Camera();
-    // Create a new AR GPS marker.
-    var gpsMarker = new AR.GPSMarker();
-    // Set the GPS marker's position.
-    gpsMarker.position.set(0, 0, 0);
-    // Add the GPS marker to the scene.
-    scene.add(gpsMarker);
-    // Start the AR scene.
-    scene.start();
-    // Create a function to calculate the distance between the camera and the GPS marker.
-    function calculateDistance() {
-      // Get the position of the camera.
-      var cameraPosition = camera.position;
-      // Get the position of the GPS marker.
-      var gpsMarkerPosition = gpsMarker.position;
-      // Calculate the distance between the two points.
-      var distance = cameraPosition.distanceTo(gpsMarkerPosition);
-      // Return the distance in meters.
-      return distance;
-    }
-  </script>
+    <title>AR.js Distance Measurement</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.0.8/aframe/build/aframe-ar.js"></script>
 </head>
-<body>
-  <a-scene>
-    <a-camera position="0 0 0"></a-camera>
-    <a-gps-marker latitude="10.325736942959024" longitude="123.91575691290201"></a-gps-marker>
-  </a-scene>
+<body style="margin: 0; overflow: hidden;">
+    <a-scene embedded arjs>
+        <a-marker preset="hiro">
+            <!-- You can place 3D models or other AR content here -->
+            <a-entity id="objectToMeasure" geometry="primitive: box; width: 0.1; height: 0.1; depth: 0.1" material="color: red;"></a-entity>
+        </a-marker>
+        <a-entity camera></a-entity>
+
+        <!-- Create an <a-text> element to display the distance -->
+        <a-text id="distanceText" position="0 0.2 -0.5" scale="2 2 2" color="black" value="Distance:"></a-text>
+    </a-scene>
+
+    <script>
+        window.addEventListener('load', () => {
+            const camera = document.querySelector('[camera]');
+            const marker = document.querySelector('a-marker');
+            const distanceText = document.querySelector('#distanceText');
+            let check;
+
+            marker.addEventListener('markerFound', () => {
+                let cameraPosition = camera.object3D.position;
+                let markerPosition = marker.object3D.position;
+                let distance = cameraPosition.distanceTo(markerPosition);
+
+                check = setInterval(() => {
+                    cameraPosition = camera.object3D.position;
+                    markerPosition = marker.object3D.position;
+                    distance = cameraPosition.distanceTo(markerPosition);
+
+                    // Update the <a-text> element with the distance
+                    distanceText.setAttribute('value', `Distance: ${distance.toFixed(2)} meters`);
+                }, 100);
+            });
+
+            marker.addEventListener('markerLost', () => {
+                clearInterval(check);
+                // Clear the distance when the marker is lost
+                distanceText.setAttribute('value', 'Distance:');
+            });
+        });
+    </script>
 </body>
 </html>
