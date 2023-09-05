@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 let markerBvisible = false;
 let markerAvisible = false;
 let markerGokuvisible = false;
