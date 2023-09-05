@@ -28,28 +28,13 @@ AFRAME.registerComponent("gokuhandler", {
         const objectNewMarker = document.getElementById("object-newmarker");
         const gokuText = document.getElementById("goku-text");
         const gokuVid = document.getElementById("gokuvid");
-        const camera = document.querySelector("[camera]");
-        const marker = document.querySelector("markerGoku");
-        let check;
 
         // When the marker is found, the `markerFound` event is triggered
         markerVideo1.addEventListener("markerFound", (event) => {
             console.log("Marker found: Goku");
             // Perform actions when the marker is found
             markerGokuvisible = true;
-            gokuVid.play();
-            let cameraPosition = camera.object3D.position;
-            let markerPosition = marker.object3D.position;
-            let distance = cameraPosition.distanceTo(markerPosition)
-
-            check = setInterval(() => {
-            cameraPosition = camera.object3D.position;
-            markerPosition = marker.object3D.position;
-            distance = cameraPosition.distanceTo(markerPosition)
-            gokuText.setAttribute("value", distance);
-            // do what you want with the distance:
-            console.log("Distance is: +" distance + " meters.");
-             
+            gokuVid.play();             
         }, 100);         
         });
         // When the marker is lost, the `markerLost` event is triggered
@@ -60,7 +45,6 @@ AFRAME.registerComponent("gokuhandler", {
             //                vid.currentTime = 0;
             gokuVid.pause();
             gokuVid.currentTime=0;
-            clearInterval(check);
             
         });
       
