@@ -1,29 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR.js Distance Example</title>
-    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <title>AR.js Distance Calculator</title>
+  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <script>
+    // Import the AR.js library.
+    import * as AR from 'ar.js';
+    // Create a new AR scene.
+    var scene = new AR.Scene();
+    // Create a new AR camera.
+    var camera = new AR.Camera();
+    // Create a new AR GPS marker.
+    var gpsMarker = new AR.GPSMarker();
+    // Set the GPS marker's position.
+    gpsMarker.position.set(0, 0, 0);
+    // Add the GPS marker to the scene.
+    scene.add(gpsMarker);
+    // Start the AR scene.
+    scene.start();
+    // Create a function to calculate the distance between the camera and the GPS marker.
+    function calculateDistance() {
+      // Get the position of the camera.
+      var cameraPosition = camera.position;
+      // Get the position of the GPS marker.
+      var gpsMarkerPosition = gpsMarker.position;
+      // Calculate the distance between the two points.
+      var distance = cameraPosition.distanceTo(gpsMarkerPosition);
+      // Return the distance in meters.
+      return distance;
+    }
+  </script>
 </head>
-<body style="margin: 0; overflow: hidden;">
-    <a-scene embedded arjs="sourceType: webcam;">
-        <!-- Add a GPS entity place -->
-        <a-gps-entity-place
-            gps-entity-place="latitude: 10.325736942959024; longitude: 123.91575691290201;"
-            name="place-marker"
-        ></a-gps-entity-place>
-
-        <!-- Camera entity to view the scene -->
-        <a-entity camera></a-entity>
-
-        <!-- Add an a-text element to display the distance -->
-        <a-text position="0 0.1 -0.5" color="black" scale="2 2 2" id="distance-text">Distance: </a-text>
-    </a-scene>
-
-    <!-- Include your JavaScript file -->
-    <script src="app.js"></script>
+<body>
+  <a-scene>
+    <a-camera position="0 0 0"></a-camera>
+    <a-gps-marker latitude="10.325736942959024" longitude="123.91575691290201"></a-gps-marker>
+  </a-scene>
 </body>
 </html>
