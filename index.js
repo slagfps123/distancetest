@@ -1,14 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     const scene = document.querySelector('a-scene');
-    const marker = document.querySelector('a-marker');
+    const placeMarker = document.querySelector('a-gps-entity-place[name="place-marker"]');
     const camera = document.querySelector('a-entity[camera]');
     const distanceText = document.getElementById('distance-text');
 
     // Function to calculate and update the distance
     function calculateDistance() {
         const cameraPosition = camera.object3D.position;
-        const markerPosition = marker.object3D.position;
-        const distance = cameraPosition.distanceTo(markerPosition).toFixed(2);
+        const placePosition = placeMarker.object3D.position;
+        const distance = cameraPosition.distanceTo(placePosition).toFixed(2);
 
         // Update the a-text element with the distance
         distanceText.setAttribute('value', `Distance: ${distance} meters`);
@@ -16,13 +16,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Set up a loop to continuously calculate and update distance
     let distanceInterval;
-    marker.addEventListener('markerFound', () => {
+    placeMarker.addEventListener('loaded', () => {
         distanceInterval = setInterval(calculateDistance, 1000); // Adjust the interval as needed
     });
 
-    marker.addEventListener('markerLost', () => {
+    placeMarker.addEventListener('gps-enter', () => {
+        // Start calculating distance when the GPS entity is nearby
+        distanceInterval = setInterval(calculateDistance, 1000); // Adjust the interval as needed
+    });
+
+    placeMarker.addEventListener('gps-exit', () => {
         clearInterval(distanceInterval);
-        // Clear the distance text when the marker is lost
+        // Clear the distance text when the GPS entity is out of range
         distanceText.setAttribute('value', 'Distance: ');
     });
 });
