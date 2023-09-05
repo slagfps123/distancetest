@@ -2,26 +2,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const scene = document.querySelector('a-scene');
     const marker = document.querySelector('a-marker');
     const camera = document.querySelector('a-entity[camera]');
+    const distanceText = document.getElementById('distance-text');
 
-    // Add an event listener for when the marker is found
-    marker.addEventListener('markerFound', () => {
-        console.log('Marker found!');
-    });
-
-    // Add an event listener for when the marker is lost
-    marker.addEventListener('markerLost', () => {
-        console.log('Marker lost.');
-    });
-
-    // Function to calculate and log the distance between camera and marker
+    // Function to calculate and update the distance
     function calculateDistance() {
         const cameraPosition = camera.object3D.position;
         const markerPosition = marker.object3D.position;
-        const distance = cameraPosition.distanceTo(markerPosition);
-        console.log('Distance to marker:', distance.toFixed(2), 'meters');
+        const distance = cameraPosition.distanceTo(markerPosition).toFixed(2);
+
+        // Update the a-text element with the distance
+        distanceText.setAttribute('value', `Distance: ${distance} meters`);
     }
 
-    // Set up a loop to continuously calculate and log distance
+    // Set up a loop to continuously calculate and update distance
     let distanceInterval;
     marker.addEventListener('markerFound', () => {
         distanceInterval = setInterval(calculateDistance, 1000); // Adjust the interval as needed
@@ -29,5 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     marker.addEventListener('markerLost', () => {
         clearInterval(distanceInterval);
+        // Clear the distance text when the marker is lost
+        distanceText.setAttribute('value', 'Distance: ');
     });
 });

@@ -1,26 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR.js Distance Example</title>
-    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-</head>
-<body style="margin: 0; overflow: hidden;">
-    <a-scene embedded arjs="sourceType: webcam;">
-        <!-- Define your marker with a specific pattern -->
-        <a-marker type="pattern" url="assets/g-angle-logo.patt">
-            <!-- Add a 3D object that will be tracked by the marker -->
-            <a-box position="0 0.5 0" material="color: red;"></a-box>
-        </a-marker>
-
-        <!-- Camera entity to view the scene -->
-        <a-entity camera></a-entity>
-    </a-scene>
-
-    <!-- Include your JavaScript file -->
-    <script src="app.js"></script>
-</body>
-</html>
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>AR.js Distance Example</title>
+                <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+                <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+            </head>
+            <body style="margin: 0; overflow: hidden;">
+                <a-scene embedded arjs="sourceType: webcam;">
+                    <!-- Define your marker with a specific pattern -->
+                    <a-marker type="pattern" url="assets/pattern-g-angle-box.patt">
+                        <!-- Add a 3D object that will be tracked by the marker -->
+                        <a-box position="0 0.5 0" material="color: red;"></a-box>
+                    </a-marker>
+            
+                    <!-- Camera entity to view the scene -->
+                    <a-entity camera></a-entity>
+            
+                    <!-- Add an a-text element to display the distance -->
+                    <a-text position="0 0.1 -0.5" color="black" scale="2 2 2" id="distance-text">Distance: </a-text>
+                </a-scene>
+            
+                <!-- Include your JavaScript file -->
+                <script src="app.js"></script>
+            </body>
+            </html>
