@@ -29,13 +29,13 @@ var models = [
     },
     {
         url: './assets/map_pointer.glb',
-        scale: '0.2 0.2 0.2',
+        scale: '0.5 0.5 0.5',
         rotation: '0 0 0',
         info: 'Entertainment',
     },
     {
         url: './assets/map_pointer.glb',
-        scale: '0.08 0.08 0.08',
+        scale: '0.5 0.5 0.5',
         rotation: '0 0 0',
         info: 'Cebu Inc.',
     },
