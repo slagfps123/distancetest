@@ -24,20 +24,14 @@ var models = [
     {
         url: './assets/map_pointer.glb',
         scale: '5 5 5',
-        info: 'G-angle, Entertainment, Cebu Inc. 1',
+        info: ' ',
         rotation: '0 0 0',
     },
     {
         url: './assets/map_pointer.glb',
         scale: '5 5 5',
         rotation: '0 0 0',
-        info: 'G-angle, Entertainment, Cebu Inc. 2',
-    },
-    {
-        url: './assets/map_pointer.glb',
-        scale: '5 5 5',
-        rotation: '0 0 0',
-        info: 'G-angle, Entertainment, Cebu Inc. 3',
+        info: 'G-angle, Entertainment, Cebu Inc.',
     },
 ];
 
