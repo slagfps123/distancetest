@@ -22,13 +22,13 @@ function staticLoadPlaces() {
 var models = [
     {
         url: './assets/map_pointer.glb',
-        scale: '5 5 5',
+        scale: '2.5 2.5 2.5',
         info: ' ',
         rotation: '0 0 0',
     },
     {
         url: './assets/map_pointer.glb',
-        scale: '5 5 5',
+        scale: '2.5 2.5 2.5',
         rotation: '0 0 0',
         info: 'G-angle, Entertainment, Cebu Inc.',
     },
