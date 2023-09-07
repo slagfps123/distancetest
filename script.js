@@ -23,19 +23,19 @@ function staticLoadPlaces() {
 var models = [
     {
         url: './assets/map_pointer.gltf',
-        scale: '0.5 0.5 0.5',
+        scale: '2.5 2.5 2.5',
         info: 'G-angle, Entertainment, Cebu Inc. 1',
         rotation: '0 0 0',
     },
     {
         url: './assets/map_pointer.gltf',
-        scale: '0.5 0.5 0.5',
+        scale: '2.5 2.5 2.5',
         rotation: '0 0 0',
         info: 'G-angle, Entertainment, Cebu Inc. 2',
     },
     {
         url: './assets/map_pointer.gltf',
-        scale: '0.5 0.5 0.5',
+        scale: '2.5 2.5 2.5',
         rotation: '0 0 0',
         info: 'G-angle, Entertainment, Cebu Inc. 3',
     },
