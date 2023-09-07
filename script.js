@@ -22,22 +22,22 @@ function staticLoadPlaces() {
 
 var models = [
     {
-        url: './assets/map_pointer.glb',
+        url: './assets/map_pointer.gltf',
         scale: '0.5 0.5 0.5',
-        info: 'G-angle',
+        info: 'G-angle, Entertainment, Cebu Inc. 1',
         rotation: '0 0 0',
     },
     {
-        url: './assets/map_pointer.glb',
+        url: './assets/map_pointer.gltf',
         scale: '0.5 0.5 0.5',
         rotation: '0 0 0',
-        info: 'Entertainment',
+        info: 'G-angle, Entertainment, Cebu Inc. 2',
     },
     {
-        url: './assets/map_pointer.glb',
+        url: './assets/map_pointer.gltf',
         scale: '0.5 0.5 0.5',
         rotation: '0 0 0',
-        info: 'Cebu Inc.',
+        info: 'G-angle, Entertainment, Cebu Inc. 3',
     },
 ];
 
